@@ -4,6 +4,11 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import errorHandler from "./middleware/errorMiddleware.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+
 
 dotenv.config();
 
@@ -12,10 +17,12 @@ app.use(express.json());
 
 console.log("MONGO:", process.env.MONGO_URL);
 
+app.use(cookieParser());
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use(errorHandler);
 
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB Connected"))
