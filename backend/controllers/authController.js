@@ -3,10 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 
-// ================= REGISTER =================
 export const register = async (req, res) => {
   try {
-    // ✅ Validation FIRST
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -17,7 +16,7 @@ export const register = async (req, res) => {
 
     const { name, email, password, role } = req.body;
 
-    // Check existing user
+   
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -26,10 +25,9 @@ export const register = async (req, res) => {
       });
     }
 
-    // Hash password
+   
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
+r
     const user = await User.create({
       name,
       email,
@@ -56,10 +54,10 @@ export const register = async (req, res) => {
   }
 };
 
-// ================= LOGIN =================
+
 export const login = async (req, res) => {
   try {
-    // ✅ Validation
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -103,10 +101,10 @@ export const login = async (req, res) => {
 
     res
       .cookie("refreshToken", refreshToken, {
-        httpOnly: true,       // 🔐 cannot be accessed by JS
-        secure: false,        // ⚠️ true in production (HTTPS)
+        httpOnly: true,      
+        secure: false,        
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .json({
         success: true,
@@ -121,7 +119,6 @@ export const login = async (req, res) => {
   }
 };
 
-// ================= REFRESH TOKEN =================
 export const refreshAccessToken = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
@@ -171,7 +168,6 @@ export const refreshAccessToken = async (req, res) => {
   }
 };
 
-// ================= LOGOUT =================
 export const logout = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
@@ -190,7 +186,6 @@ export const logout = async (req, res) => {
       await user.save();
     }
 
-    // ✅ Clear cookie
     res.clearCookie("refreshToken");
 
     res.json({
