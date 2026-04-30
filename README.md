@@ -1,74 +1,176 @@
-# Secure Auth API
+# 🔐 Secure Auth API
 
-## Overview
-The Secure Auth API is designed to provide robust authentication and authorization mechanisms for applications, ensuring that user identities are properly verified before any sensitive operations can be performed.
+## 📌 Overview
 
-## Features
-- Secure user authentication with JWT tokens
-- Password hashing and storage
-- Role-based access control
-- User registration and login
-- Token expiry management
-- Refresh token mechanism
+Secure Auth API is a backend authentication system built using Node.js, Express, and MongoDB. It provides secure user authentication and authorization using JWT, refresh tokens, and role-based access control.
 
-## Getting Started
-### Prerequisites
-- Node.js (version >= 12.x)
-- MongoDB (for user data storage)
+---
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/vedant-nage/Secure-Auth-API.git
-   cd Secure-Auth-API
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+## 🚀 Features
 
-### Configuration
-Before running the application, create a `.env` file in the root directory and add the following variables:
-```
-DB_URI=mongodb://<username>:<password>@your_mongodb:27017/your_database_name
-JWT_SECRET=your_jwt_secret
-```
+* 🔑 JWT Authentication (Access + Refresh Tokens)
+* 🔐 Password hashing using bcrypt
+* 🍪 Refresh tokens stored in HTTP-only cookies
+* 🛡️ Role-Based Access Control (RBAC)
+* 🔒 Protected routes using middleware
+* 🔄 Token refresh mechanism
+* 🚪 Secure logout functionality
+* ✅ Input validation using express-validator
 
-### Running the Application
-To start the server, use:
+---
+
+## 🛠️ Tech Stack
+
+* Node.js
+* Express.js
+* MongoDB + Mongoose
+* JSON Web Token (JWT)
+* bcryptjs
+* cookie-parser
+* express-validator
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ Clone the repository
+
 ```bash
-npm start
+git clone https://github.com/vedant-nage/Secure-Auth-API.git
+cd Secure-Auth-API
 ```
-The server should now be running on `http://localhost:3000`.
 
-## API Endpoints
-### 1. Registration
-- **Endpoint:** `POST /api/auth/register`
-- **Request Body:**
-  - `username` (string, required)
-  - `email` (string, required)
-  - `password` (string, required)
+### 2️⃣ Install dependencies
 
-### 2. Login
-- **Endpoint:** `POST /api/auth/login`
-- **Request Body:**
-  - `email` (string, required)
-  - `password` (string, required)
+```bash
+npm install
+```
 
-### 3. Token Refresh
-- **Endpoint:** `POST /api/auth/token`
+---
 
-## Error Handling
-The API returns standard HTTP status codes for errors:
-- `400 Bad Request` for invalid input.
-- `401 Unauthorized` for failed authentication.
-- `404 Not Found` for requests to non-existent endpoints.
+### 3️⃣ Create `.env` file
 
-## Contribution
-Contributions are welcome! Please open an issue or submit a pull request.
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/auth_db
+ACCESS_TOKEN_SECRET=your_access_secret
+REFRESH_TOKEN_SECRET=your_refresh_secret
+PORT=5000
+```
 
-## License
-This project is licensed under the MIT License.
+---
 
-## Contact
-For further inquiries, please contact vedant-nage.
+### 4️⃣ Run the server
+
+```bash
+npm run dev
+```
+
+Server will run on:
+
+```
+http://localhost:5000
+```
+
+---
+
+## 📡 API Endpoints
+
+### 🔹 Authentication Routes
+
+#### Register
+
+```
+POST /api/auth/register
+```
+
+#### Login
+
+```
+POST /api/auth/login
+```
+
+Returns:
+
+* Access Token (response)
+* Refresh Token (HTTP-only cookie)
+
+---
+
+#### Refresh Token
+
+```
+POST /api/auth/refresh
+```
+
+* Automatically uses cookie
+
+---
+
+#### Logout
+
+```
+POST /api/auth/logout
+```
+
+* Clears refresh token cookie
+
+---
+
+### 🔹 User Routes
+
+#### Get Profile (Protected)
+
+```
+GET /api/user/profile
+```
+
+Headers:
+
+```
+Authorization: Bearer <accessToken>
+```
+
+---
+
+### 🔹 Admin Routes
+
+#### Get All Users (Admin Only)
+
+```
+GET /api/admin/users
+```
+
+---
+
+## 🔐 Security Features
+
+* Access token expires in 15 minutes
+* Refresh token expires in 7 days
+* Refresh tokens stored in HTTP-only cookies
+* Passwords hashed using bcrypt
+* Role-based access control implemented
+
+---
+
+## 🧪 Testing Flow
+
+1. Register a user
+2. Login to get access token + cookie
+3. Access protected route (`/profile`)
+4. Use refresh endpoint when token expires
+5. Logout to clear session
+
+---
+
+## 🧠 What I Learned
+
+* JWT authentication flow
+* Access vs Refresh tokens
+* Middleware-based route protection
+* Role-based authorization
+* Secure cookie handling
+---
+
+## 👨‍💻 Author
+
+Vedant Nage
